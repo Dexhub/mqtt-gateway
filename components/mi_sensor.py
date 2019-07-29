@@ -52,7 +52,7 @@ class MiSensor:
         data = {}
         for param, _ in self.parameters.items():
             data[param] = self._poller.parameter_value(param)
-        print('Update sensor "{}" ({}) successful'.format(self.device_id, json.dump(data)))
+        print('Update sensor "{}" ({}) successful'.format(self.device_id, json.dumps(data)))
         return data
 
 
