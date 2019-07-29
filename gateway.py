@@ -37,7 +37,12 @@ def mqtt_send_config(mqtt_node, parameters):
 
 def mqtt_send_data(sensor, mqtt_node):
     data = sensor.update()
-    mqtt_node.client.publish('{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower(), json.dumps(data))
+    if not data:
+        print("ERROR can't link")
+        return
+    topic ='{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower()
+    print("Send Data:%s %s"%(topic,json.dumps(data)))
+    mqtt_node.client.publish(topic, json.dumps(data))
 
 
 if 'sensors' in config:
@@ -59,5 +64,5 @@ if 'sensors' in config:
 
     while True:
         for item in sensors_list:
-            mqtt_send_data(item['sensor'], item['item'])
+            mqtt_send_data(item['sensor'], item['mqtt_node'])
         sleep(5)

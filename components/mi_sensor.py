@@ -41,6 +41,9 @@ class MiSensor:
             except Exception as _:
                 print("SYSTEM LOAD ERROR", _)
 
+        if self._poller._cache is None:
+            return None
+
         for param, _ in self.parameters.items():
             data[param] = self._poller.parameter_value(param)
         return data
