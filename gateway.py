@@ -55,7 +55,7 @@ if 'sensors' in config:
             mqtt_send_config(node, mitemp_parameters)
         else:
             raise Exception()
-        sensors_list.append({"sensor": sensor, "mqtt_node": node})
+        sensors_list.append({sensor: node})
 
     while True:
         for sensor, node in sensors_list:
