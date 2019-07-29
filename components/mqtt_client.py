@@ -43,6 +43,14 @@ class MqttNode:
         self._base_topic = mqtt_config['base_topic']
         self.client = self.load_client(node_id, mqtt_config)
 
+    @property
+    def node_id(self):
+        return self._node_id
+
+    @property
+    def base_topic(self):
+        return self.base_topic
+
     def load_client(self, node_id, mqtt_config):
         client = mqtt.Client(node_id)
         client.on_connect = on_connect

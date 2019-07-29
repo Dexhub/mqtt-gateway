@@ -1,3 +1,4 @@
-#git+https://github.com/open-homeautomation/miflora.git#egg=miflora
+bluepy
 miflora==0.4
 paho-mqtt==1.4.0
+mitemp_bt==0.0.1
