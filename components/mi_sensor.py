@@ -32,7 +32,6 @@ class MiSensor:
         name = self.device_id
         mac = self._poller._mac
         try:
-            self._poller.fill_cache()
             firmware = self._poller.firmware_version()
         except (IOError, BluetoothBackendException):
             print('Initial connection to Mi Flora sensor "{}" ({}) failed.'.format(name, mac))
@@ -57,7 +56,6 @@ class MiSensor:
 
         while attempts != 0 and not self._poller._cache:
             try:
-                self._poller.fill_cache()
                 self._poller.parameter_value(MI_BATTERY)
             except (IOError, BluetoothBackendException):
                 attempts = attempts - 1
