@@ -21,8 +21,34 @@ class MiSensor:
         self._cache_timeout = cache_timeout
         self._poller = bt_poller
         self.parameters = parameters
+        self.status = None
+        self.load_sensor()
+
+    def load_sensor(self):
+        firmware = None
+        name = ""
+        mac = self._poller._mac
+        try:
+            self._poller.fill_cache()
+            self._poller.parameter_value(MI_LIGHT)
+            firmware = self._poller.firmware_version()
+        except (IOError, BluetoothBackendException):
+            print('Initial connection to Mi Flora sensor "{}" ({}) failed.'.format(name, mac))
+            self.status = False
+            return
+
+        print('Internal name: "{}"'.format(name))
+        print('Device name:   "{}"'.format(name))
+        print('MAC address:   {}'.format(mac))
+        print('Firmware:      {}'.format(firmware))
+        print('Initial connection to Mi Flora sensor "{}" ({}) successful'.format(name, mac))
+        self.status = True
 
     def update(self):
+        if not self.status:
+            self.load_sensor()
+            return None
+
         attempts = 2
         self._poller._cache = None
         self._poller._last_read = None
@@ -40,9 +66,6 @@ class MiSensor:
                 self._poller._last_read = None
             except Exception as _:
                 print("SYSTEM LOAD ERROR", _)
-
-        if self._poller._cache is None:
-            return None
 
         for param, _ in self.parameters.items():
             data[param] = self._poller.parameter_value(param)
