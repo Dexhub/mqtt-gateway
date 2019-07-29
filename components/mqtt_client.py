@@ -49,7 +49,7 @@ class MqttNode:
 
     @property
     def base_topic(self):
-        return self.base_topic
+        return self._base_topic
 
     def load_client(self, node_id, mqtt_config):
         client = mqtt.Client(node_id)
