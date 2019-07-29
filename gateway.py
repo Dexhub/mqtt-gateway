@@ -62,4 +62,4 @@ if 'sensors' in config:
     while True:
         for item in sensors_list:
             mqtt_send_data(item['sensor'], item['mqtt_node'])
-        sleep(300)
+        sleep(10)
