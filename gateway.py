@@ -37,8 +37,6 @@ def mqtt_send_config(mqtt_node, parameters):
 
 def mqtt_send_data(sensor, mqtt_node):
     data = sensor.update()
-    if not data:
-        return
     topic = '{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower()
     print("Send Data:%s %s" % (topic, json.dumps(data)))
     mqtt_node.client.publish(topic, json.dumps(data))
