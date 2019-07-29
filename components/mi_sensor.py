@@ -49,23 +49,7 @@ class MiSensor:
             self.load_sensor()
             return None
 
-        attempts = 2
-        self._poller._cache = None
-        self._poller._last_read = None
         data = {}
-
-        while attempts != 0 and not self._poller._cache:
-            try:
-                self._poller.parameter_value(MI_BATTERY)
-            except (IOError, BluetoothBackendException):
-                attempts = attempts - 1
-                if attempts > 0:
-                    print('Retrying ...')
-                self._poller._cache = None
-                self._poller._last_read = None
-            except Exception as _:
-                print("SYSTEM LOAD ERROR", _)
-
         for param, _ in self.parameters.items():
             data[param] = self._poller.parameter_value(param)
         print('Update sensor "{}" ({}) successful'.format(self.device_id, json.dump(data)))
