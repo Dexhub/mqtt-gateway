@@ -39,8 +39,8 @@ def mqtt_send_data(sensor, mqtt_node):
     data = sensor.update()
     if not data:
         return
-    topic ='{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower()
-    print("Send Data:%s %s"%(topic,json.dumps(data)))
+    topic = '{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower()
+    print("Send Data:%s %s" % (topic, json.dumps(data)))
     mqtt_node.client.publish(topic, json.dumps(data))
 
 
@@ -52,10 +52,10 @@ if 'sensors' in config:
         mac = sensor_config['mac']
         node = MqttNode(device_id, config['mqtt'])
         if sensor_config['type'] == "mi_flora":
-            sensor = MiFloraSensor(mac)
+            sensor = MiFloraSensor(device_id, mac)
             mqtt_send_config(node, miflora_parameters)
         elif sensor_config['type'] == "mi_tempbt":
-            sensor = MiTempBtSensor(mac)
+            sensor = MiTempBtSensor(device_id, mac)
             mqtt_send_config(node, mitemp_parameters)
         else:
             raise Exception()
