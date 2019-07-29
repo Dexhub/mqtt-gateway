@@ -10,8 +10,8 @@
 import json
 from time import sleep
 
-from mqtt_gateway.components.mi_flora import MiFloraSensor
-from mqtt_gateway.components.mqtt_client import MqttNode
+from components.mi_flora import MiFloraSensor
+from components.mqtt_client import MqttNode
 
 config_path = "config.json"
 config = None
