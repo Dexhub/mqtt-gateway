@@ -60,7 +60,7 @@ if 'sensors' in config:
         sensors_list.append({"sensor": sensor, "mqtt_node": node})
 
 while True:
-    print("LOAD Sensors Data:")
+    print("Load Sensors Data:")
     for item in sensors_list:
         mqtt_send_data(item['sensor'], item['mqtt_node'])
     sleep(300)
