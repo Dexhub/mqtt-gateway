@@ -1,0 +1,18 @@
+[Unit]
+Description=MQTT GATEWAY
+Documentation=https://github.com/ThomDietrich/miflora-mqtt-daemon
+After=bluetooth.service mosquitto.service
+
+[Service]
+Type=notify
+User=daemon
+Group=daemon
+WorkingDirectory=/opt/mqtt-gateway/
+ExecStart=/opt/miflora-mqtt-daemon/miflora-mqtt-daemon.py
+StandardOutput=null
+StandardError=journal
+Environment=PYTHONUNBUFFERED=true
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

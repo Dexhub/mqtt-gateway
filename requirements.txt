@@ -1,0 +1,3 @@
+#git+https://github.com/open-homeautomation/miflora.git#egg=miflora
+miflora==0.4
+paho-mqtt==1.4.0

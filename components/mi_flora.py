@@ -35,7 +35,6 @@ class MiFloraSensor:
         self.poller = miflora_poller.MiFloraPoller(mac=mac, backend=BluepyBackend, cache_timeout=cache_timeout)
 
     def update(self):
-        # return {"light": 572, "temperature": 32.8, "moisture": 10, "conductivity": 90, "battery": 100}
         attempts = 2
         self.poller._cache = None
         self.poller._last_read = None
