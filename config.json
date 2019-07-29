@@ -15,11 +15,6 @@
       "device_id": "xiezhualan",
       "mac": "C4:7C:8D:6B:0A:8C",
       "type": "mi_flora"
-    },
-    {
-      "device_id": "tem",
-      "mac": "C4:7C:8D:6B:0B:E3",
-      "type": "mi_tempbt"
     }
   ]
 }

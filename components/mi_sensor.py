@@ -85,14 +85,6 @@ class MiTempBtSensor(MiSensor):
     def __init__(self, device_id, mac, cache_timeout=600, force_update=False):
         poller = mitemp_bt_poller.MiTempBtPoller(mac=mac, backend=BluepyBackend, cache_timeout=cache_timeout)
         super().__init__(device_id, poller, mitemp_parameters, cache_timeout, force_update)
-    #
-    # def set_cache_timeout(self, cache_timeout):
-    #     if cache_timeout < 10:
-    #         print("cache_timeout to short %s", cache_timeout)
-    #         return
-    #     if cache_timeout != self._cache_timeout:
-    #         self._poller = mitemp_bt_poller.MiTempBtPoller(mac=self._mac, backend=BluepyBackend, cache_timeout=cache_timeout)
-    #         self._cache_timeout = cache_timeout
 
 
 miflora_parameters = OrderedDict([
