@@ -6,7 +6,7 @@ import os
 import sys
 from time import sleep
 
-from components import print_line
+from components import print_line, sd_notifier
 from components.mi_sensor import MiFloraSensor, MiTempBtSensor, mitemp_parameters, miflora_parameters
 from components.mqtt_client import MqttNode
 
@@ -54,7 +54,7 @@ def load_sensors():
             else:
                 raise Exception()
             sensors_list.append({"sensor": sensor, "mqtt_node": node})
-    print_line("Load Success!", sd_notify=True)
+    return True
 
 
 project_name = 'MQTT Gateway'
@@ -69,7 +69,8 @@ config_dir = parse_args.config_dir
 with open(os.path.join(config_dir, 'config.json')) as f:
     config = json.loads(f.read())
 
-load_sensors()
+if load_sensors():
+    sd_notifier.notify('READY=1')
 
 while True:
     print_line("Load Sensors Data:")
