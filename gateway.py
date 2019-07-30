@@ -1,23 +1,15 @@
-# -*- coding:utf8 -*-
+#! /usr/bin/python3
 
-# author          :haiyang.song
-# email           :meishild@gmail.com
-# datetime        :2019-07-29
-# version         :1.0
-# python_version  :3.4.3
-# description     :
-# ==============================================================================
+import argparse
 import json
+import os
+import sys
 from time import sleep
 
 from components.mi_sensor import MiFloraSensor, MiTempBtSensor, mitemp_parameters, miflora_parameters
 from components.mqtt_client import MqttNode
 
-config_path = "config.json"
 config = None
-
-with open(config_path) as f:
-    config = json.loads(f.read())
 
 sensors_list = []
 
@@ -44,22 +36,37 @@ def mqtt_send_data(sensor, mqtt_node):
     mqtt_node.client.publish(topic, json.dumps(data))
 
 
-if 'sensors' in config:
-    sensors_config = config['sensors']
+def load_sensors():
+    if 'sensors' in config:
+        sensors_config = config['sensors']
 
-    for sensor_config in sensors_config:
-        device_id = sensor_config['device_id']
-        mac = sensor_config['mac']
-        node = MqttNode(device_id, config['mqtt'])
-        if sensor_config['type'] == "mi_flora":
-            sensor = MiFloraSensor(device_id, mac)
-            mqtt_send_config(node, miflora_parameters)
-        elif sensor_config['type'] == "mi_tempbt":
-            sensor = MiTempBtSensor(device_id, mac)
-            mqtt_send_config(node, mitemp_parameters)
-        else:
-            raise Exception()
-        sensors_list.append({"sensor": sensor, "mqtt_node": node})
+        for sensor_config in sensors_config:
+            device_id = sensor_config['device_id']
+            mac = sensor_config['mac']
+            node = MqttNode(device_id, config['mqtt'])
+            if sensor_config['type'] == "mi_flora":
+                sensor = MiFloraSensor(device_id, mac)
+                mqtt_send_config(node, miflora_parameters)
+            elif sensor_config['type'] == "mi_tempbt":
+                sensor = MiTempBtSensor(device_id, mac)
+                mqtt_send_config(node, mitemp_parameters)
+            else:
+                raise Exception()
+            sensors_list.append({"sensor": sensor, "mqtt_node": node})
+
+project_name = 'MQTT Gateway'
+project_url = "https://github.com/meishild/mqtt-gateway"
+parser = argparse.ArgumentParser(description=project_name, epilog='For further details see: ' + project_url)
+parser.add_argument('--config_dir', help='set directory where config.ini is located', default=sys.path[0])
+parse_args = parser.parse_args()
+
+# Load configuration file
+config_dir = parse_args.config_dir
+
+with open(os.path.join(config_dir, 'config.json')) as f:
+    config = json.loads(f.read())
+
+load_sensors()
 
 while True:
     print("Load Sensors Data:")

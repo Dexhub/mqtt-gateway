@@ -65,7 +65,7 @@ def get_backend():
     except ImportError:
         from btlewrap import GatttoolBackend
         backend = GatttoolBackend
-    print('MiTempBt is using %s backend.', backend.__name__)
+    print('MiTempBt is using %s backend.' % backend.__name__)
     return backend
 
 
