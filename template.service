@@ -9,8 +9,6 @@ User=daemon
 Group=daemon
 WorkingDirectory=/opt/mqtt-gateway/
 ExecStart=/opt/mqtt-gateway/gateway.py
-StandardOutput=null
-StandardError=journal
 Environment=PYTHONUNBUFFERED=true
 Restart=always
 
