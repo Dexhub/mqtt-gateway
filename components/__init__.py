@@ -10,8 +10,7 @@
 
 # Systemd Service Notifications - https://github.com/bb4242/sdnotify
 import sys
-from email.utils import localtime
-from time import strftime
+from time import strftime, localtime
 
 import sdnotify
 from unidecode import unidecode
