@@ -16,6 +16,8 @@ from miflora import miflora_poller
 from btlewrap import BluetoothBackendException, GatttoolBackend
 from collections import OrderedDict
 
+from components import print_line
+
 
 class MiSensor:
     def __init__(self, device_id, bt_poller, parameters, cache_timeout=600, force_update=False):
@@ -34,14 +36,14 @@ class MiSensor:
         try:
             firmware = self._poller.firmware_version()
         except (IOError, BluetoothBackendException):
-            print('Initial connection to Mi Flora sensor "{}" ({}) failed.'.format(name, mac))
+            print_line('Initial connection to Mi Flora sensor "{}" ({}) failed.'.format(name, mac), error=True)
             self.status = False
             return
 
         print('Device Id:   "{}"'.format(name))
         print('MAC address:   {}'.format(mac))
         print('Firmware:      {}'.format(firmware))
-        print('Initial connection to Mi sensor "{}" ({}) successful'.format(name, mac))
+        print_line('Initial connection to Mi sensor "{}" ({}) successful'.format(name, mac))
         self.status = True
 
     def update(self):
@@ -52,7 +54,7 @@ class MiSensor:
         data = {}
         for param, _ in self.parameters.items():
             data[param] = self._poller.parameter_value(param)
-        print('Update sensor "{}" ({}) successful'.format(self.device_id, json.dumps(data)))
+        print_line('Update sensor "{}" ({}) successful'.format(self.device_id, json.dumps(data)))
         return data
 
 
@@ -65,7 +67,7 @@ def get_backend():
     except ImportError:
         from btlewrap import GatttoolBackend
         backend = GatttoolBackend
-    print('MiTempBt is using %s backend.' % backend.__name__)
+    print_line('MiTempBt is using %s backend.' % backend.__name__)
     return backend
 
 

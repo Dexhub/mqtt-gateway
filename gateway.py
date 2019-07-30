@@ -6,6 +6,7 @@ import os
 import sys
 from time import sleep
 
+from components import print_line
 from components.mi_sensor import MiFloraSensor, MiTempBtSensor, mitemp_parameters, miflora_parameters
 from components.mqtt_client import MqttNode
 
@@ -32,7 +33,7 @@ def mqtt_send_data(sensor, mqtt_node):
     if not sensor.status:
         return
     topic = '{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower()
-    print("Send Data:%s %s" % (topic, json.dumps(data)))
+    print_line("Send Data:%s %s" % (topic, json.dumps(data)))
     mqtt_node.client.publish(topic, json.dumps(data))
 
 
@@ -53,6 +54,8 @@ def load_sensors():
             else:
                 raise Exception()
             sensors_list.append({"sensor": sensor, "mqtt_node": node})
+    print_line("Load Success!", sd_notify=True)
+
 
 project_name = 'MQTT Gateway'
 project_url = "https://github.com/meishild/mqtt-gateway"
@@ -69,7 +72,7 @@ with open(os.path.join(config_dir, 'config.json')) as f:
 load_sensors()
 
 while True:
-    print("Load Sensors Data:")
+    print_line("Load Sensors Data:")
     for item in sensors_list:
         mqtt_send_data(item['sensor'], item['mqtt_node'])
     sleep(300)

@@ -12,6 +12,8 @@ import sys
 
 import paho.mqtt.client as mqtt
 
+from components import print_line
+
 _sub_dict = {
 
 }
@@ -19,22 +21,22 @@ _sub_dict = {
 
 def on_connect(client, userdata, flags, rc):
     client.publish(userdata['topic'], 'on')
-    print("Connected with result code " + str(rc) + userdata + flags)
+    print_line("Connected with result code " + str(rc) + userdata + flags)
 
 
 def on_message(client, userdata, msg):
-    print("SEND:" + msg.topic + " " + str(msg.payload.decode('utf-8')))
+    print_line("SEND:" + msg.topic + " " + str(msg.payload.decode('utf-8')))
     if msg.topic in _sub_dict:
         _sub_dict[msg.topic](userdata, msg)
 
 
 def on_subscribe(client, userdata, mid, granted_qos):
-    print("On Subscribed: qos = %d" % granted_qos)
+    print_line("On Subscribed: qos = %d" % granted_qos)
 
 
 def on_disconnect(client, userdata, rc):
     if rc != 0:
-        print("Unexpected disconnection %s" % rc)
+        print_line("Unexpected disconnection %s" % rc)
 
 
 class MqttNode:
@@ -78,7 +80,7 @@ class MqttNode:
         try:
             client.connect(mqtt_config['host'], mqtt_config['port'], keepalive=60)
         except:
-            print('MQTT connection error. Please check your settings in the configuration file "config.ini"')
+            print_line('MQTT connection error. Please check your settings in the configuration file "config.ini"', error=True)
             sys.exit(1)
         client.loop_start()
         client.user_data_set({"topic": topic})
