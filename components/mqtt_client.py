@@ -20,7 +20,7 @@ _sub_dict = {
 
 
 def on_connect(client, userdata, flags, rc):
-    client.publish(userdata['topic'], 'on')
+    client.publish(userdata['topic'], 'on', qos=1, retain=True)
     print_line("Connected with result code " + str(rc) + userdata + flags)
 
 
@@ -62,7 +62,7 @@ class MqttNode:
         client.on_message = on_message
         client.on_subscribe = on_subscribe
         client.on_disconnect = on_disconnect
-        client.will_set(topic, 'off')
+        client.will_set(topic, 'off', qos=1, retain=True)
         if mqtt_config.get('tls', False):
             # According to the docs, setting PROTOCOL_SSLv23 "Selects the highest protocol version
             # that both the client and server support. Despite the name, this option can select
