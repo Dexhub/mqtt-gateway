@@ -3,7 +3,6 @@
 
 from bluepy.btle import Scanner, DefaultDelegate, UUID, Peripheral
 
-
 class ScanDelegate(DefaultDelegate):
     def __init__(self):
         DefaultDelegate.__init__(self)

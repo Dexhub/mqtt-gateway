@@ -1,8 +1,14 @@
 {
   "name": "PI02",
   "mqtt": {
-    "host": "10.0.0.8",
+    "host": "127.0.0.1",
     "port": 1883,
+    "username": "",
+    "passowrd": "",
+    "tls": false,
+    "tls_ca_cert": "",
+    "tls_keyfile": "",
+    "tls_certfile": "",
     "base_topic": "homeassistant"
   },
   "sensors": [
@@ -15,6 +21,11 @@
       "device_id": "xiezhualan",
       "mac": "C4:7C:8D:6B:0A:8C",
       "type": "mi_flora"
+    },
+    {
+      "device_id": "mi_tempbt",
+      "mac": "58:2D:34:34:A4:A7",
+      "type": "mi_temphu"
     }
   ]
 }

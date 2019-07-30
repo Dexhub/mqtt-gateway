@@ -13,7 +13,7 @@ from mitemp_bt import mitemp_bt_poller
 from mitemp_bt.mitemp_bt_poller import MI_TEMPERATURE, MI_BATTERY, MI_HUMIDITY
 from miflora.miflora_poller import MiFloraPoller, MI_BATTERY, MI_CONDUCTIVITY, MI_LIGHT, MI_MOISTURE, MI_TEMPERATURE
 from miflora import miflora_poller
-from btlewrap import BluepyBackend, BluetoothBackendException
+from btlewrap import BluetoothBackendException, GatttoolBackend
 from collections import OrderedDict
 
 
@@ -56,6 +56,19 @@ class MiSensor:
         return data
 
 
+def get_backend():
+    backend = None
+    try:
+        import bluepy.btle  # noqa: F401 pylint: disable=unused-import
+        from btlewrap import BluepyBackend
+        backend = BluepyBackend
+    except ImportError:
+        from btlewrap import GatttoolBackend
+        backend = GatttoolBackend
+    print('MiTempBt is using %s backend.', backend.__name__)
+    return backend
+
+
 mitemp_parameters = OrderedDict([
     (MI_TEMPERATURE, dict(name="AirTemperature", name_pretty='Air Temperature', typeformat='%.1f', unit='°C', device_class="temperature")),
     (MI_BATTERY, dict(name="Battery", name_pretty='Sensor Battery Level', typeformat='%d', unit='%', device_class="battery")),
@@ -65,7 +78,7 @@ mitemp_parameters = OrderedDict([
 
 class MiTempBtSensor(MiSensor):
     def __init__(self, device_id, mac, cache_timeout=600, force_update=False):
-        poller = mitemp_bt_poller.MiTempBtPoller(mac=mac, backend=BluepyBackend, cache_timeout=cache_timeout)
+        poller = mitemp_bt_poller.MiTempBtPoller(mac=mac, backend=get_backend(), cache_timeout=cache_timeout)
         super().__init__(device_id, poller, mitemp_parameters, cache_timeout, force_update)
 
 
@@ -80,5 +93,5 @@ miflora_parameters = OrderedDict([
 
 class MiFloraSensor(MiSensor):
     def __init__(self, device_id, mac, cache_timeout=600, force_update=False):
-        poller = miflora_poller.MiFloraPoller(mac=mac, backend=BluepyBackend, cache_timeout=cache_timeout)
+        poller = miflora_poller.MiFloraPoller(mac=mac, backend=get_backend(), cache_timeout=cache_timeout)
         super().__init__(device_id, poller, miflora_parameters, cache_timeout, force_update)
