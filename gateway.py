@@ -14,8 +14,6 @@ config = None
 
 sensors_list = []
 
-sd_notifier.notify('READY=1')
-
 
 def mqtt_send_config(mqtt_node, parameters):
     topic_path = '{}/sensor/{}'.format(mqtt_node.base_topic, mqtt_node.node_id)
@@ -70,6 +68,9 @@ config_dir = parse_args.config_dir
 
 with open(os.path.join(config_dir, 'config.json')) as f:
     config = json.loads(f.read())
+
+sd_notifier.notify('READY=1')
+load_sensors()
 
 while True:
     print_line("Load Sensors Data:")
