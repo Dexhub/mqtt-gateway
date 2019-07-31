@@ -29,6 +29,7 @@ def mqtt_send_config(mqtt_node, parameters):
 
 
 def mqtt_send_data(sensor, mqtt_node):
+    print_line("Load %s" )
     data = sensor.update()
     if not sensor.status:
         return

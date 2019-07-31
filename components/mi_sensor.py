@@ -47,8 +47,9 @@ class MiSensor:
         self.status = True
 
     def update(self):
+        self.load_sensor()
+
         if not self.status:
-            self.load_sensor()
             return None
 
         data = {}
