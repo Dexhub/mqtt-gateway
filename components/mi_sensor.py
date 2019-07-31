@@ -30,7 +30,6 @@ class MiSensor:
         self.load_sensor()
 
     def load_sensor(self):
-        firmware = None
         name = self.device_id
         mac = self._poller._mac
         try:
@@ -62,7 +61,6 @@ class MiSensor:
 
 
 def get_backend():
-    backend = None
     try:
         import bluepy.btle  # noqa: F401 pylint: disable=unused-import
         from btlewrap import BluepyBackend
