@@ -1,5 +1,5 @@
 #! /usr/bin/python3
-
+import _thread
 import argparse
 import json
 import os
@@ -29,7 +29,7 @@ def mqtt_send_config(mqtt_node, parameters):
 
 
 def mqtt_send_data(sensor, mqtt_node):
-    print_line("Load %s" )
+    print_line("Load %s")
     data = sensor.update()
     if not sensor.status:
         return
@@ -76,5 +76,5 @@ load_sensors()
 while True:
     print_line("Load Sensors Data:")
     for item in sensors_list:
-        mqtt_send_data(item['sensor'], item['mqtt_node'])
+        _thread.start_new_thread(mqtt_send_data, (item['sensor'], item['mqtt_node']))
     sleep(300)
