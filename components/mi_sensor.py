@@ -40,6 +40,8 @@ class MiSensor:
             self.status = False
             return
 
+        if self.status:
+            return
         print('Device Id:   "{}"'.format(name))
         print('MAC address:   {}'.format(mac))
         print('Firmware:      {}'.format(firmware))
