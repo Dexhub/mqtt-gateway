@@ -58,7 +58,7 @@ class MiSensor:
         return self._data
 
 
-def get_backend():
+def get_backend(device_id):
     try:
         import bluepy.btle  # noqa: F401 pylint: disable=unused-import
         from btlewrap import BluepyBackend
@@ -66,7 +66,7 @@ def get_backend():
     except ImportError:
         from btlewrap import GatttoolBackend
         backend = GatttoolBackend
-    print_line('MiTempBt is using %s backend.' % backend.__name__)
+    print_line('%s is using %s backend.' % (device_id, backend.__name__))
     return backend
 
 
@@ -79,7 +79,7 @@ mitemp_parameters = OrderedDict([
 
 class MiTempBtSensor(MiSensor):
     def __init__(self, device_id, mac, cache_timeout=600, force_update=False):
-        poller = mitemp_bt_poller.MiTempBtPoller(mac=mac, backend=get_backend(), cache_timeout=cache_timeout)
+        poller = mitemp_bt_poller.MiTempBtPoller(mac=mac, backend=get_backend(device_id), cache_timeout=cache_timeout)
         super().__init__(device_id, poller, mitemp_parameters, cache_timeout, force_update)
 
 
@@ -94,5 +94,5 @@ miflora_parameters = OrderedDict([
 
 class MiFloraSensor(MiSensor):
     def __init__(self, device_id, mac, cache_timeout=600, force_update=False):
-        poller = miflora_poller.MiFloraPoller(mac=mac, backend=get_backend(), cache_timeout=cache_timeout)
+        poller = miflora_poller.MiFloraPoller(mac=mac, backend=get_backend(device_id), cache_timeout=cache_timeout)
         super().__init__(device_id, poller, miflora_parameters, cache_timeout, force_update)
