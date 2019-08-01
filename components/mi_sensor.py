@@ -27,6 +27,7 @@ class MiSensor:
         self.device_id = device_id
         self.parameters = parameters
         self.status = None
+        self._data = {}
         self.load_sensor()
 
     def load_sensor(self):
@@ -34,6 +35,9 @@ class MiSensor:
         mac = self._poller._mac
         try:
             firmware = self._poller.firmware_version()
+            for param, _ in self.parameters.items():
+                self._data[param] = self._poller.parameter_value(param)
+            print_line('Update sensor "{}" ({}) successful'.format(self.device_id, json.dumps(self._data)))
         except (IOError, BluetoothBackendException):
             print_line('Initial connection to Mi Flora sensor "{}" ({}) failed.'.format(name, mac), error=True)
             self.status = False
@@ -49,15 +53,9 @@ class MiSensor:
 
     def update(self):
         self.load_sensor()
-
         if not self.status:
             return None
-
-        data = {}
-        for param, _ in self.parameters.items():
-            data[param] = self._poller.parameter_value(param)
-        print_line('Update sensor "{}" ({}) successful'.format(self.device_id, json.dumps(data)))
-        return data
+        return self._data
 
 
 def get_backend():

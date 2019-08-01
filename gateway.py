@@ -73,7 +73,7 @@ sd_notifier.notify('READY=1')
 load_sensors()
 
 while True:
-    print_line("Load Sensors Data:")
+    print_line("Start Load Sensors Data -->")
     for item in sensors_list:
         _thread.start_new_thread(mqtt_send_data, (item['sensor'], item['mqtt_node']))
     sleep(300)
