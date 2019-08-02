@@ -67,6 +67,8 @@ if __name__ == '__main__':
     with open(os.path.join(config_dir, 'config.json')) as f:
         config = json.loads(f.read())
 
+    sd_notifier.notify('READY=1')
+
     print_line("--> Start Load Sensor")
     sensors_list = load_sensors(config)
     print_line("--> Finish Load Sensor")
@@ -75,8 +77,3 @@ if __name__ == '__main__':
     for item in sensors_list:
         scheduler.add_job(mqtt_send_data, 'interval', seconds=600, args=(item['sensor'], item['mqtt_node']))
     scheduler.start()
-
-    while True:
-        sd_notifier.notify('READY=1')
-        import time
-        time.sleep(1)
