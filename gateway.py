@@ -51,6 +51,7 @@ def load_sensors(config):
             else:
                 raise Exception()
             sensors_list.append({"sensor": sensor, "mqtt_node": node})
+            time.sleep(1)
     return sensors_list
 
 
