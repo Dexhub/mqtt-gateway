@@ -61,10 +61,10 @@ parser.add_argument('--config_dir', help='set directory where config.ini is loca
 parse_args = parser.parse_args()
 
 sd_notifier.notify('READY=1')
+import time
 
+time.sleep(3)
 if __name__ == '__main__':
-    import time
-
     # Load configuration file
     config_dir = parse_args.config_dir
 
