@@ -61,9 +61,7 @@ parser.add_argument('--config_dir', help='set directory where config.ini is loca
 parse_args = parser.parse_args()
 
 sd_notifier.notify('READY=1')
-import time
 
-time.sleep(3)
 if __name__ == '__main__':
     # Load configuration file
     config_dir = parse_args.config_dir
@@ -79,3 +77,8 @@ if __name__ == '__main__':
     for item in sensors_list:
         scheduler.add_job(mqtt_send_data, 'interval', seconds=600, args=(item['sensor'], item['mqtt_node']))
     scheduler.start()
+
+    while True:
+        import time
+
+        time.sleep(1)
