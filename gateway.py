@@ -75,5 +75,6 @@ load_sensors()
 while True:
     print_line("Start Load Sensors Data -->")
     for item in sensors_list:
-        await mqtt_send_data(item['sensor'], item['mqtt_node'])
+        async with mqtt_send_data(item['sensor'], item['mqtt_node']):
+            print_line("Load Finish <--")
     sleep(300)
