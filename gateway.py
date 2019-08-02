@@ -10,10 +10,6 @@ from components import print_line, sd_notifier
 from components.mi_sensor import MiFloraSensor, MiTempBtSensor, mitemp_parameters, miflora_parameters
 from components.mqtt_client import MqttNode
 
-config = None
-
-sensors_list = []
-
 
 def mqtt_send_config(mqtt_node, parameters):
     topic_path = '{}/sensor/{}'.format(mqtt_node.base_topic, mqtt_node.node_id)
@@ -37,7 +33,8 @@ async def mqtt_send_data(sensor, mqtt_node):
     mqtt_node.client.publish(topic, json.dumps(data), 1, True)
 
 
-def load_sensors():
+def load_sensors(config):
+    sensors_list = []
     if 'sensors' in config:
         sensors_config = config['sensors']
 
@@ -54,7 +51,7 @@ def load_sensors():
             else:
                 raise Exception()
             sensors_list.append({"sensor": sensor, "mqtt_node": node})
-    return True
+    return sensors_list
 
 
 project_name = 'MQTT Gateway'
@@ -63,18 +60,19 @@ parser = argparse.ArgumentParser(description=project_name, epilog='For further d
 parser.add_argument('--config_dir', help='set directory where config.ini is located', default=sys.path[0])
 parse_args = parser.parse_args()
 
-# Load configuration file
-config_dir = parse_args.config_dir
+if __name__ == '__main__':
+    # Load configuration file
+    config_dir = parse_args.config_dir
 
-with open(os.path.join(config_dir, 'config.json')) as f:
-    config = json.loads(f.read())
+    with open(os.path.join(config_dir, 'config.json')) as f:
+        config = json.loads(f.read())
 
-sd_notifier.notify('READY=1')
-load_sensors()
+    sensors_list = load_sensors(config)
 
-while True:
-    print_line("Start Load Sensors Data -->")
-    for item in sensors_list:
-        async with mqtt_send_data(item['sensor'], item['mqtt_node']):
-            print_line("Load Finish <--")
-    sleep(300)
+    sd_notifier.notify('READY=1')
+
+    while True:
+        print_line("Start Load Sensors Data -->")
+        for item in sensors_list:
+            mqtt_send_data(item['sensor'], item['mqtt_node'])
+        sleep(300)

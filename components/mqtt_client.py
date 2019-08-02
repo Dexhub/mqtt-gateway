@@ -80,7 +80,7 @@ class MqttNode:
         try:
             client.connect(mqtt_config['host'], mqtt_config['port'], keepalive=60)
         except:
-            print_line('MQTT connection error. Please check your settings in the configuration file "config.ini"', error=True)
+            print_line('MQTT connection error. Please check your settings in the configuration file "config.json"', error=True)
             sys.exit(1)
         client.loop_start()
         client.user_data_set({"topic": topic})
