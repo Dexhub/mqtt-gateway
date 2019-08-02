@@ -78,5 +78,5 @@ if __name__ == '__main__':
     scheduler = BlockingScheduler()
 
     for item in sensors_list:
-        scheduler.add_job(mqtt_send_data, 'interval', seconds=60, args=(item['sensor'], item['mqtt_node']))
+        scheduler.add_job(mqtt_send_data, 'interval', seconds=600, args=(item['sensor'], item['mqtt_node']))
     scheduler.start()
