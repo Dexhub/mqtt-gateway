@@ -67,9 +67,9 @@ if __name__ == '__main__':
     with open(os.path.join(config_dir, 'config.json')) as f:
         config = json.loads(f.read())
 
-    sensors_list = load_sensors(config)
-
     sd_notifier.notify('READY=1')
+
+    sensors_list = load_sensors(config)
 
     while True:
         print_line("Start Load Sensors Data -->")
