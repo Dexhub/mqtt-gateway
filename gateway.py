@@ -28,7 +28,7 @@ def mqtt_send_config(mqtt_node, parameters):
         mqtt_node.client.publish('{}/{}_{}/config'.format(topic_path, mqtt_node.node_id, sensor_type).lower(), json.dumps(payload), 1, True)
 
 
-def mqtt_send_data(sensor, mqtt_node):
+async def mqtt_send_data(sensor, mqtt_node):
     data = sensor.update()
     if not sensor.status:
         return
@@ -75,5 +75,5 @@ load_sensors()
 while True:
     print_line("Start Load Sensors Data -->")
     for item in sensors_list:
-        _thread.start_new_thread(mqtt_send_data, (item['sensor'], item['mqtt_node']))
+        mqtt_send_data(item['sensor'], item['mqtt_node'])
     sleep(300)
