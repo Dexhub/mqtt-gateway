@@ -23,13 +23,13 @@ def mqtt_send_config(mqtt_node, parameters):
 
 
 def mqtt_send_data(sensor, mqtt_node):
-    print_line("Start Load Data:" + mqtt_node.node_id)
+    print_line("--> Start Load Data:" + mqtt_node.node_id)
     data = sensor.update()
     if not sensor.status:
-        print_line("Load Data Fail:" + mqtt_node.node_id)
+        print_line("--> Load Data Fail:" + mqtt_node.node_id)
         return
     topic = '{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower()
-    print_line("Send Data:%s %s" % (topic, json.dumps(data)))
+    print_line("--> Send Data:%s %s" % (topic, json.dumps(data)))
     mqtt_node.client.publish(topic, json.dumps(data), 1, True)
 
 
@@ -72,7 +72,9 @@ if __name__ == '__main__':
     sd_notifier.notify('READY=1')
     time.sleep(1)
 
+    print_line("--> Start Load Sensor")
     sensors_list = load_sensors(config)
+    print_line("--> Finish Load Sensor")
     scheduler = BlockingScheduler()
 
     for item in sensors_list:
