@@ -60,6 +60,8 @@ parser = argparse.ArgumentParser(description=project_name, epilog='For further d
 parser.add_argument('--config_dir', help='set directory where config.ini is located', default=sys.path[0])
 parse_args = parser.parse_args()
 
+sd_notifier.notify('READY=1')
+
 if __name__ == '__main__':
     import time
 
@@ -68,9 +70,6 @@ if __name__ == '__main__':
 
     with open(os.path.join(config_dir, 'config.json')) as f:
         config = json.loads(f.read())
-
-    sd_notifier.notify('READY=1')
-    time.sleep(1)
 
     print_line("--> Start Load Sensor")
     sensors_list = load_sensors(config)
