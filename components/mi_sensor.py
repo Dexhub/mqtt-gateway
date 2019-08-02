@@ -34,6 +34,7 @@ class MiSensor:
         name = self.device_id
         mac = self._poller._mac
         try:
+            self._poller.fill_cache()
             firmware = self._poller.firmware_version()
             for param, _ in self.parameters.items():
                 self._data[param] = self._poller.parameter_value(param)

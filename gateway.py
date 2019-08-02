@@ -77,4 +77,4 @@ if __name__ == '__main__':
         for item in sensors_list:
             coroutine = mqtt_send_data(item['sensor'], item['mqtt_node'])
             loop.run_until_complete(coroutine)
-        sleep(300)
+        sleep(60)
