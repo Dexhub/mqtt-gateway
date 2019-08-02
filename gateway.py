@@ -1,11 +1,9 @@
 #! /usr/bin/python3
 import argparse
-import asyncio
 import json
 import os
 import sys
-import time
-from time import sleep
+import schedule
 
 from components import print_line, sd_notifier
 from components.mi_sensor import MiFloraSensor, MiTempBtSensor, mitemp_parameters, miflora_parameters
@@ -71,12 +69,11 @@ if __name__ == '__main__':
     sd_notifier.notify('READY=1')
 
     sensors_list = load_sensors(config)
-
-    import schedule
     schedule.clear()
     for item in sensors_list:
         schedule.every(60).seconds.do(mqtt_send_data, *(item['sensor'], item['mqtt_node']))
 
     while True:
+        import time
         schedule.run_pending()
         time.sleep(1)

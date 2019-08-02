@@ -3,3 +3,4 @@ paho-mqtt==1.4.0
 mitemp_bt==0.0.1
 sdnotify
 unidecode
+schedule
