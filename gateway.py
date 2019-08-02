@@ -1,6 +1,6 @@
 #! /usr/bin/python3
-import _thread
 import argparse
+import asyncio
 import json
 import os
 import sys
@@ -73,6 +73,8 @@ if __name__ == '__main__':
 
     while True:
         print_line("Start Load Sensors Data -->")
+        loop = asyncio.get_event_loop()
         for item in sensors_list:
-            mqtt_send_data(item['sensor'], item['mqtt_node'])
-        sleep(300)
+            coroutine = mqtt_send_data(item['sensor'], item['mqtt_node'])
+            loop.run_until_complete(coroutine)
+        sleep(60)
