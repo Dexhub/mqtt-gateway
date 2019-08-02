@@ -3,8 +3,7 @@ import argparse
 import json
 import os
 import sys
-import schedule
-
+from apscheduler.schedulers.blocking import BlockingScheduler
 from components import print_line, sd_notifier
 from components.mi_sensor import MiFloraSensor, MiTempBtSensor, mitemp_parameters, miflora_parameters
 from components.mqtt_client import MqttNode
@@ -73,10 +72,8 @@ if __name__ == '__main__':
     time.sleep(1)
 
     sensors_list = load_sensors(config)
-    schedule.clear()
-    for item in sensors_list:
-        schedule.every(60).seconds.do(mqtt_send_data, *(item['sensor'], item['mqtt_node']))
+    scheduler = BlockingScheduler()
 
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    for item in sensors_list:
+        scheduler.add_job(mqtt_send_data, 'interval', seconds=60, args=(item['sensor'], item['mqtt_node']))
+    scheduler.start()
