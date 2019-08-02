@@ -24,6 +24,7 @@ def mqtt_send_config(mqtt_node, parameters):
 
 
 def mqtt_send_data(sensor, mqtt_node):
+    print_line("Start Load Data:" + mqtt_node.node_id)
     data = sensor.update()
     if not sensor.status:
         return
@@ -61,6 +62,7 @@ parse_args = parser.parse_args()
 
 if __name__ == '__main__':
     import time
+
     # Load configuration file
     config_dir = parse_args.config_dir
 
