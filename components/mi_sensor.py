@@ -40,7 +40,7 @@ class MiSensor:
                 self._data[param] = self._poller.parameter_value(param)
             print_line('Update sensor "{}" ({}) successful'.format(self.device_id, json.dumps(self._data)))
         except (IOError, BluetoothBackendException):
-            print_line('Initial connection to Mi Flora sensor "{}" ({}) failed.'.format(name, mac), error=True)
+            print_line('Initial connection to Mi Sensor "{}" ({}) failed.'.format(name, mac), error=True)
             self.status = False
             return
 
@@ -49,7 +49,7 @@ class MiSensor:
         print('Device Id:   "{}"'.format(name))
         print('MAC address:   {}'.format(mac))
         print('Firmware:      {}'.format(firmware))
-        print_line('Initial connection to Mi sensor "{}" ({}) successful'.format(name, mac))
+        print_line('Initial connection to Mi Sensor "{}" ({}) successful'.format(name, mac))
         self.status = True
 
     def update(self):

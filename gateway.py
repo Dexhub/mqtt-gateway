@@ -26,6 +26,7 @@ def mqtt_send_data(sensor, mqtt_node):
     print_line("Start Load Data:" + mqtt_node.node_id)
     data = sensor.update()
     if not sensor.status:
+        print_line("Load Data Fail:" + mqtt_node.node_id)
         return
     topic = '{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower()
     print_line("Send Data:%s %s" % (topic, json.dumps(data)))
