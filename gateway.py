@@ -60,8 +60,6 @@ parser = argparse.ArgumentParser(description=project_name, epilog='For further d
 parser.add_argument('--config_dir', help='set directory where config.ini is located', default=sys.path[0])
 parse_args = parser.parse_args()
 
-sd_notifier.notify('READY=1')
-
 if __name__ == '__main__':
     # Load configuration file
     config_dir = parse_args.config_dir
@@ -79,6 +77,6 @@ if __name__ == '__main__':
     scheduler.start()
 
     while True:
+        sd_notifier.notify('READY=1')
         import time
-
         time.sleep(1)
