@@ -24,7 +24,7 @@ def mqtt_send_config(mqtt_node, parameters):
         mqtt_node.client.publish('{}/{}_{}/config'.format(topic_path, mqtt_node.node_id, sensor_type).lower(), json.dumps(payload), 1, True)
 
 
-async def mqtt_send_data(sensor, mqtt_node):
+def mqtt_send_data(sensor, mqtt_node):
     data = sensor.update()
     if not sensor.status:
         return
@@ -71,10 +71,10 @@ if __name__ == '__main__':
 
     sensors_list = load_sensors(config)
 
-    while True:
-        print_line("Start Load Sensors Data -->")
-        loop = asyncio.get_event_loop()
-        for item in sensors_list:
-            coroutine = mqtt_send_data(item['sensor'], item['mqtt_node'])
-            loop.run_until_complete(coroutine)
-        sleep(60)
+    import threading
+
+    print_line("Start Load Sensors Data -->")
+    loop = asyncio.get_event_loop()
+    for item in sensors_list:
+        timer = threading.Timer(60, mqtt_send_data, args=(item['sensor'], item['mqtt_node']))
+        timer.start()
