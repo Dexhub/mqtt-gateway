@@ -4,6 +4,7 @@ import asyncio
 import json
 import os
 import sys
+import time
 from time import sleep
 
 from components import print_line, sd_notifier
@@ -71,10 +72,11 @@ if __name__ == '__main__':
 
     sensors_list = load_sensors(config)
 
-    import threading
-
-    print_line("Start Load Sensors Data -->")
-    loop = asyncio.get_event_loop()
+    import schedule
+    schedule.clear()
     for item in sensors_list:
-        timer = threading.Timer(60, mqtt_send_data, args=(item['sensor'], item['mqtt_node']))
-        timer.start()
+        schedule.every(60).seconds.do(mqtt_send_data, *(item['sensor'], item['mqtt_node']))
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
