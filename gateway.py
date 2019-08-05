@@ -54,6 +54,7 @@ parse_args = parser.parse_args()
 
 class SendDataThread(threading.Thread):
     def __init__(self, sensor, mqtt_node):
+        threading.Thread.__init__(self)
         self._sensor = sensor
         self._mqtt_node = mqtt_node
 
