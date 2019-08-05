@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import threading
 import time
 import sys
 from components import print_line, sd_notifier
@@ -20,17 +21,6 @@ def mqtt_send_config(mqtt_node, parameters):
         if 'device_class' in params:
             payload['device_class'] = params['device_class']
         mqtt_node.client.publish('{}/{}_{}/config'.format(topic_path, mqtt_node.node_id, sensor_type).lower(), json.dumps(payload), 1, True)
-
-
-def mqtt_send_data(sensor, mqtt_node):
-    print_line("--> Start Load Data:" + mqtt_node.node_id)
-    data = sensor.update()
-    if not sensor.status:
-        print_line("--> Load Data Fail:" + mqtt_node.node_id)
-        return
-    topic = '{}/sensor/{}/state'.format(mqtt_node.base_topic, mqtt_node.node_id).lower()
-    print_line("--> Send Data:%s %s" % (topic, json.dumps(data)))
-    mqtt_node.client.publish(topic, json.dumps(data), 1, True)
 
 
 def load_sensors(config):
@@ -61,6 +51,27 @@ parser = argparse.ArgumentParser(description=project_name, epilog='For further d
 parser.add_argument('--config_dir', help='set directory where config.ini is located', default=sys.path[0])
 parse_args = parser.parse_args()
 
+
+class SendDataThread(threading.Thread):
+    def __init__(self, sensor, mqtt_node):
+        self._sensor = sensor
+        self._mqtt_node = mqtt_node
+
+    @property
+    def mqtt_node(self):
+        return self._mqtt_node
+
+    def mqtt_send_data(self):
+        print_line("--> Start Load Data:" + self._mqtt_node.node_id)
+        data = self._sensor.update()
+        if not self._sensor.status:
+            print_line("--> Load Data Fail:" + self._mqtt_node.node_id)
+            return
+        topic = '{}/sensor/{}/state'.format(self._mqtt_node.base_topic, self._mqtt_node.node_id).lower()
+        print_line("--> Send Data:%s %s" % (topic, json.dumps(data)))
+        self._mqtt_node.client.publish(topic, json.dumps(data), 1, True)
+
+
 if __name__ == '__main__':
     # Load configuration file
     config_dir = parse_args.config_dir
@@ -76,6 +87,14 @@ if __name__ == '__main__':
 
     while True:
         for item in sensors_list:
-            mqtt_send_data(item['sensor'], item['mqtt_node'])
-            time.sleep(10)
+            send_job = SendDataThread(item['sensor'], item['mqtt_node'])
+            send_job.start()
+            start = time.time()
+            while True:
+                if send_job.isAlive():
+                    time.sleep(1)
+                if time.time() - start > 120:
+                    print_line("--> Sensor Update Timeout :" + send_job.mqtt_node.node_id)
+                    break
+            time.sleep(2)
         time.sleep(300)
