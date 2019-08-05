@@ -44,7 +44,7 @@ class MiSensor:
             self.status = False
             return
         finally:
-            self._poller._bt_interface.disconnect()
+            self._poller._bt_interface._backend.disconnect()
 
         if self.status:
             return
