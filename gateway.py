@@ -87,6 +87,7 @@ if __name__ == '__main__':
     print_line("--> Finish Load Sensor")
 
     while True:
+        print_line("--> Start Load GateWay Sensors")
         for item in sensors_list:
             send_job = SendDataThread(item['sensor'], item['mqtt_node'])
             print_line("--> Sensor Update Load Job:" + send_job.getName() + "," + send_job.mqtt_node.node_id)
@@ -101,4 +102,5 @@ if __name__ == '__main__':
                     print_line("--> Sensor Update Timeout 300s:" + send_job.getName() + "," + send_job.mqtt_node.node_id)
                     break
             time.sleep(2)
+        print_line("--> Load GateWay Sensors Finish, Sleep 300s")
         time.sleep(300)
