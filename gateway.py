@@ -62,7 +62,7 @@ class SendDataThread(threading.Thread):
     def mqtt_node(self):
         return self._mqtt_node
 
-    def mqtt_send_data(self):
+    def run(self):
         print_line("--> Start Load Data:" + self._mqtt_node.node_id)
         data = self._sensor.update()
         if not self._sensor.status:
