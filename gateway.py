@@ -95,7 +95,7 @@ if __name__ == '__main__':
                 if send_job.isAlive():
                     time.sleep(1)
                 if time.time() - start > 300:
-                    print_line("--> Sensor Update Timeout 300s:" + send_job.mqtt_node.node_id)
+                    print_line("--> Sensor Update Timeout 300s:" + send_job.getName() + "," + send_job.mqtt_node.node_id)
                     break
             time.sleep(2)
         time.sleep(300)
