@@ -63,7 +63,7 @@ class SendDataThread(threading.Thread):
         return self._mqtt_node
 
     def run(self):
-        print_line("--> Start Load Data:" + self._mqtt_node.node_id)
+        print_line("--> Load Data:" + self._mqtt_node.node_id)
         data = self._sensor.update()
         if not self._sensor.status:
             print_line("--> Load Data Fail:" + self._mqtt_node.node_id)
@@ -89,6 +89,7 @@ if __name__ == '__main__':
     while True:
         for item in sensors_list:
             send_job = SendDataThread(item['sensor'], item['mqtt_node'])
+            print_line("--> Sensor Update Load Job:" + send_job.getName() + "," + send_job.mqtt_node.node_id)
             send_job.start()
             start = time.time()
             while True:
