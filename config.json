@@ -1,7 +1,7 @@
 {
   "name": "PI02",
   "mqtt": {
-    "host": "127.0.0.1",
+    "host": "10.0.0.8",
     "port": 1883,
     "username": "",
     "passowrd": "",
