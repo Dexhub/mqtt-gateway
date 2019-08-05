@@ -34,7 +34,9 @@ class MiSensor:
         name = self.device_id
         mac = self._poller._mac
         try:
+            print_line('Update Sensor fill cache {}'.format(self.device_id))
             self._poller.fill_cache()
+            print_line('Success Update Sensor fill cache {}'.format(self.device_id))
             firmware = self._poller.firmware_version()
             for param, _ in self.parameters.items():
                 self._data[param] = self._poller.parameter_value(param)
@@ -43,8 +45,6 @@ class MiSensor:
             print_line('Initial connection to Mi Sensor "{}" ({}) failed.'.format(name, mac), error=True)
             self.status = False
             return
-        finally:
-            self._poller._bt_interface._backend.__del__()
 
         if self.status:
             return
