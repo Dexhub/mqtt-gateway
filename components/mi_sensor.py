@@ -35,6 +35,7 @@ class MiSensor:
         mac = self._poller._mac
         try:
             print_line('Update Sensor fill cache {}'.format(self.device_id))
+            self._poller.clear_cache()
             self._poller.fill_cache()
             print_line('Success Update Sensor fill cache {}'.format(self.device_id))
             firmware = self._poller.firmware_version()
